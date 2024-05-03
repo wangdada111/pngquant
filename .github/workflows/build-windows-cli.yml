@@ -7,14 +7,20 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive  # 递归克隆子模块
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
-      - name: Build release version
-        run: cargo build --release
+      - name: Install msys-git
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+      - name: Build release version with lcms2
+        run: cargo build --release --features=lcms2
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
