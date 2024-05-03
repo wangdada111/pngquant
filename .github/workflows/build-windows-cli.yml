@@ -1,23 +1,22 @@
-name:  Windows CLI
+name: Build pngquant for Windows
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Rust
+      - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           override: true
-          target: x86_64-pc-windows-msvc
-      - name: Build CLI
-        run: cargo build --release --target x86_64-pc-windows-msvc
-      - name: Upload artifact
+      - name: Build release version
+        run: cargo build --release
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: windows-cli
-          path: target/x86_64-pc-windows-msvc/release/your_cli_name.exe
-          
+          name: pngquant-windows
+          path: target/release/pngquant.exe
